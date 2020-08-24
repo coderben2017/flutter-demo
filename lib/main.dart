@@ -18,6 +18,12 @@ class MyApp extends StatelessWidget {
           String text = ModalRoute.of(context).settings.arguments;
           return NewRoute(text: text);
         },
+        'state_page': (context) {
+          return CounterWidget(initValue: 0);
+        },
+        'tab_box_a_page': (context) {
+          return TabBoxA();
+        },
         '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       },
     );
@@ -63,10 +69,27 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             FlatButton(
-              child: Text('navigator to new route'),
+              child: Text('navigator to new_route'),
               textColor: Colors.blue,
               onPressed: () async {
-                var res = await Navigator.pushNamed(context, 'new_page', arguments: 'text to new page');
+                var res = await Navigator.pushNamed(context, 'new_page',
+                    arguments: 'text to new page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to state_route'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'state_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to tab_box_a_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'tab_box_a_page');
                 print(res);
               },
             ),
@@ -94,19 +117,20 @@ class NewRoute extends StatelessWidget {
       appBar: AppBar(title: Text('new route')),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(text),
-              FlatButton(
-                child: Text('go back'),
-                color: Colors.blue,
-                textColor: Colors.white,
-                onPressed: () {
-                  Navigator.pop(context, {'msg': 'i am return text'});
-                },
-              )
-            ],
-          )),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(text),
+          FlatButton(
+            child: Text('go back'),
+            color: Colors.blue,
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.pop(context, {'msg': 'i am return text'});
+            },
+          ),
+          ScaffoldTitleWidget()
+        ],
+      )),
     );
   }
 }
@@ -121,6 +145,194 @@ class RandomWordsWidget extends StatelessWidget {
     );
   }
 }
+
+class ScaffoldTitleWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Scaffold scaffold = context.findAncestorWidgetOfExactType<Scaffold>();
+    return (scaffold.appBar as AppBar).title;
+  }
+}
+
+class CounterWidget extends StatefulWidget {
+  const CounterWidget({Key key, this.initValue});
+
+  final int initValue;
+
+  @override
+  _CountWidgetState createState() => _CountWidgetState();
+}
+
+class _CountWidgetState extends State<CounterWidget> {
+  int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _counter = widget.initValue;
+    print('initState');
+  }
+
+  @override
+  void didUpdateWidget(CounterWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('didUpdateWidget');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('build');
+    return Scaffold(
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          FlatButton(
+            child: Text('$_counter'),
+            onPressed: () => setState(() => ++_counter),
+          ),
+          StateChildWidget()
+        ],
+      )),
+    );
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    print('deactivate');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('dispose');
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    print('reassemble');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('didChangeDependencies');
+  }
+}
+
+class StateChildWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text('show bar'),
+      onPressed: () {
+        ScaffoldState parentState =
+            context.findAncestorStateOfType<ScaffoldState>();
+        parentState.showSnackBar(SnackBar(
+          content: Text('i am bar'),
+        ));
+      },
+    );
+  }
+}
+
+//////////////////////////////
+
+class TabBoxA extends StatefulWidget {
+  TabBoxA({Key key}) : super(key: key);
+
+  @override
+  _TabBoxAState createState() => new _TabBoxAState();
+}
+
+class _TabBoxAState extends State<TabBoxA> {
+  bool _isActive = false;
+
+  void _handleChange(bool value) {
+    setState(() {
+      _isActive = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBoxAChild(
+      isActive: _isActive,
+      onChange: _handleChange,
+    );
+  }
+}
+
+class TabBoxAChild extends StatefulWidget {
+  TabBoxAChild({Key key, this.isActive = false, @required this.onChange})
+      : super(key: key);
+
+  final bool isActive;
+  final ValueChanged<bool> onChange;
+
+  @override
+  TabBoxAChildState createState() => new TabBoxAChildState();
+}
+
+class TabBoxAChildState extends State<TabBoxAChild> {
+  bool _isHighlight = false;
+
+  void _handleTab() {
+    widget.onChange(!widget.isActive);
+  }
+
+  void _handleTapDown(TapDownDetails details) {
+    setState(() {
+      _isHighlight = true;
+    });
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    setState(() {
+      _isHighlight = false;
+    });
+  }
+
+  void _handleTapCancel() {
+    setState(() {
+      _isHighlight = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _handleTab,
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      child: Container(
+        child: Center(
+          child: Text(
+            widget.isActive ? 'Active' : 'Inactive',
+            style: TextStyle(
+                fontSize: 50,
+                color: widget.isActive ? Colors.blueAccent : Colors.white,
+                decoration: TextDecoration.none),
+          ),
+        ),
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+            color: widget.isActive ? Colors.lightGreenAccent : Colors.grey,
+            border: _isHighlight
+                ? Border.all(color: Colors.redAccent, width: 10)
+                : null),
+      ),
+    );
+  }
+}
+
+//////////////////////////////////////////
+
+//////////////////////////////////////////
 
 void testFuture() {
   Future.wait([
