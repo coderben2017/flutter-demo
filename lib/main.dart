@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter2/pages/form.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo1',
       initialRoute: '/',
       theme: ThemeData(
+        primaryColor: Colors.blue,
         primarySwatch: Colors.purple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -23,6 +25,12 @@ class MyApp extends StatelessWidget {
         },
         'tab_box_a_page': (context) {
           return TabBoxA();
+        },
+        'font_page': (context) {
+          return FontWidget();
+        },
+        'login_page': (context) {
+          return LoginFormWidget();
         },
         '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       },
@@ -68,8 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            FlatButton(
-              child: Text('navigator to new_route'),
+            RandomWordsWidget(),
+            RaisedButton.icon(
+              icon: Icon(Icons.add),
+              label: Text('navigator to new_route'),
               textColor: Colors.blue,
               onPressed: () async {
                 var res = await Navigator.pushNamed(context, 'new_page',
@@ -77,8 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 print(res);
               },
             ),
-            FlatButton(
-              child: Text('navigator to state_route'),
+            RaisedButton.icon(
+              icon: Icon(Icons.favorite_border),
+              label: Text('navigator to state_route'),
               textColor: Colors.blue,
               onPressed: () async {
                 var res = await Navigator.pushNamed(context, 'state_page');
@@ -93,7 +104,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 print(res);
               },
             ),
-            RandomWordsWidget()
+            FlatButton(
+              child: Text('navigator to font_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'font_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to login_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'login_page');
+                print(res);
+              },
+            ),
           ],
         ),
       ),
@@ -331,7 +357,27 @@ class TabBoxAChildState extends State<TabBoxAChild> {
 }
 
 //////////////////////////////////////////
-
+class FontWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Image.network(
+          'https://avatars2.githubusercontent.com/u/20411648?s=460&v=4',
+          width: 200,
+          height: 200,
+        ),
+        Text('\ue000',
+            style: TextStyle(
+                fontFamily: 'MaterialIcons',
+                fontSize: 24,
+                color: Colors.green,
+                decoration: TextDecoration.none))
+      ],
+    );
+  }
+}
 //////////////////////////////////////////
 
 void testFuture() {
