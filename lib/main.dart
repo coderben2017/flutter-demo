@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter2/pages/form.dart';
+import 'package:flutter2/pages/progress.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +31,10 @@ class MyApp extends StatelessWidget {
           return FontWidget();
         },
         'login_page': (context) {
-          return LoginFormWidget();
+          return LoginFormRoute();
+        },
+        'progress_page': (context) {
+          return ProgressRoute();
         },
         '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       },
@@ -117,6 +121,14 @@ class _MyHomePageState extends State<MyHomePage> {
               textColor: Colors.blue,
               onPressed: () async {
                 var res = await Navigator.pushNamed(context, 'login_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to progress_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'progress_page');
                 print(res);
               },
             ),

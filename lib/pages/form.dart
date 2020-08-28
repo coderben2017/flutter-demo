@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginFormWidget extends StatefulWidget {
+class LoginFormRoute extends StatefulWidget {
   @override
   _LoginFormWidgetState createState() => new _LoginFormWidgetState();
 }
 
-class _LoginFormWidgetState extends State<LoginFormWidget> {
+class _LoginFormWidgetState extends State<LoginFormRoute> {
   TextEditingController _loginNameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   GlobalKey _globalKey = new GlobalKey();
