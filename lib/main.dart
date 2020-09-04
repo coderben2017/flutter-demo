@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter2/pages/flex.dart';
 import 'package:flutter2/pages/form.dart';
 import 'package:flutter2/pages/progress.dart';
+import 'package:flutter2/pages/stack.dart';
+import 'package:flutter2/pages/transform.dart';
+import 'package:flutter2/pages/wrap.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,6 +39,18 @@ class MyApp extends StatelessWidget {
         },
         'progress_page': (context) {
           return ProgressRoute();
+        },
+        'flex_page': (context) {
+          return FlexRoute();
+        },
+        'wrap_page': (context) {
+          return WrapRoute();
+        },
+        'stack_page': (context) {
+          return StackRoute();
+        },
+        'transform_page': (context) {
+          return TransformRoute();
         },
         '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       },
@@ -129,6 +145,38 @@ class _MyHomePageState extends State<MyHomePage> {
               textColor: Colors.blue,
               onPressed: () async {
                 var res = await Navigator.pushNamed(context, 'progress_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to flex_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'flex_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to wrap_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'wrap_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to stack_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'stack_page');
+                print(res);
+              },
+            ),
+            FlatButton(
+              child: Text('navigator to transform_page'),
+              textColor: Colors.blue,
+              onPressed: () async {
+                var res = await Navigator.pushNamed(context, 'transform_page');
                 print(res);
               },
             ),
